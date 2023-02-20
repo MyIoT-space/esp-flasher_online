@@ -4,7 +4,7 @@ const disconnectButton = document.getElementById('disconnectButton');
 // const resetButton = document.getElementById('resetButton');
 // const consoleStartButton = document.getElementById('consoleStartButton');
 // const consoleStopButton = document.getElementById('consoleStopButton');
-// const eraseButt on = document.getElementById('eraseButton');
+const eraseButton = document.getElementById('eraseButton');
 const programButton = document.getElementById('programButton');
 const filesDiv = document.getElementById('files');
 const terminal = document.getElementById('terminal');
@@ -14,6 +14,8 @@ const lblBaudrate = document.getElementById('lblBaudrate');
 const lblConnTo = document.getElementById('lblConnTo');
 const table = document.getElementById('fileTable');
 const alertDiv = document.getElementById('alertDiv');
+const boards = document.getElementById('boards');
+
 
 // import { Transport } from './cp210x-webusb.js'
 import * as esptooljs from "./bundle.js";
@@ -31,7 +33,7 @@ let file1 = null;
 let connected = false;
 
 disconnectButton.style.display = 'none';
-// eraseButton.style.display = 'none';
+eraseButton.style.display = 'none';
 // consoleStopButton.style.display = 'none';
 filesDiv.style.display = 'none';
 
@@ -107,17 +109,17 @@ connectButton.onclick = async () => {
 //   await transport.setDTR(true);
 // };
 
-// eraseButton.onclick = async () => {
-//   eraseButton.disabled = true;
-//   try {
-//     await esploader.erase_flash();
-//   } catch (e) {
-//     console.error(e);
-//     term.writeln(`Error: ${e.message}`);
-//   } finally {
-//     eraseButton.disabled = false;
-//   }
-// };
+eraseButton.onclick = async () => {
+  eraseButton.disabled = true;
+  try {
+    await esploader.erase_flash();
+  } catch (e) {
+    console.error(e);
+    term.writeln(`Error: ${e.message}`);
+  } finally {
+    eraseButton.disabled = false;
+  }
+};
 
 addFile.onclick = () => {
   var rowCount = table.rows.length;
@@ -128,8 +130,23 @@ addFile.onclick = () => {
   var element1 = document.createElement('input');
   element1.type = 'text';
   element1.id = 'offset' + rowCount;
-  element1.value = '0x10000';
+  console.log(boards.value)
+  element1.value = '0x100';
+  // if (boards.value()== "ESP32") {
+  //   // console.log("esp32 normal irmao");
+  //   element1.value = '0x100000';
+  // }
+  // if (boards.value()== "ESPCAM") {
+  //   // console.log("espcam");
+  //   element1.value = '0x100000';
+  // }
+  // if (boards.value()== "ESP12") {
+  //   // console.log("esp8266");
+  //   element1.value = '0x1000000';
+  // }
   cell1.appendChild(element1);
+
+  
 
   // Column 2 - File selector
   var cell2 = row.insertCell(1);
@@ -157,7 +174,7 @@ addFile.onclick = () => {
     element4.setAttribute('class', 'btn');
     element4.setAttribute('value', 'Remove'); // or element1.value = "button";
     element4.onclick = function () {
-      removeRow(row);
+    removeRow(row);
     };
     cell4.appendChild(element4);
   }
@@ -192,39 +209,6 @@ disconnectButton.onclick = async () => {
 };
 
 let isConsoleClosed = false;
-// consoleStartButton.onclick = async () => {
-//   if (device === null) {
-//     device = await navigator.serial.requestPort({});
-//     transport = new Transport(device);
-//   }
-//   lblConsoleFor.style.display = 'block';
-//   consoleStartButton.style.display = 'none';
-//   consoleStopButton.style.display = 'initial';
-//   programDiv.style.display = 'none';
-
-//   await transport.connect();
-//   isConsoleClosed = false;
-
-//   while (true && !isConsoleClosed) {
-//     let val = await transport.rawRead();
-//     if (typeof val !== 'undefined') {
-//       term.write(val);
-//     } else {
-//       break;
-//     }
-//   }
-//   console.log('quitting console');
-// };
-
-// consoleStopButton.onclick = async () => {
-//   isConsoleClosed = true;
-//   await transport.disconnect();
-//   await transport.waitForUnlock(1500);
-//   term.clear();
-//   consoleStartButton.style.display = 'initial';
-//   consoleStopButton.style.display = 'none';
-//   programDiv.style.display = 'initial';
-// };
 
 function validate_program_inputs() {
   let offsetArr = [];
@@ -312,5 +296,5 @@ programButton.onclick = async () => {
     }
   }
 };
-
+const selectElement = document.querySelector('.ice-cream');
 addFile.onclick();
