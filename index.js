@@ -1,15 +1,15 @@
 const baudrates = document.getElementById('baudrates');
 const connectButton = document.getElementById('connectButton');
 const disconnectButton = document.getElementById('disconnectButton');
-const resetButton = document.getElementById('resetButton');
-const consoleStartButton = document.getElementById('consoleStartButton');
-const consoleStopButton = document.getElementById('consoleStopButton');
-const eraseButton = document.getElementById('eraseButton');
+// const resetButton = document.getElementById('resetButton');
+// const consoleStartButton = document.getElementById('consoleStartButton');
+// const consoleStopButton = document.getElementById('consoleStopButton');
+// const eraseButt on = document.getElementById('eraseButton');
 const programButton = document.getElementById('programButton');
 const filesDiv = document.getElementById('files');
 const terminal = document.getElementById('terminal');
 const programDiv = document.getElementById('program');
-const consoleDiv = document.getElementById('console');
+// const consoleDiv = document.getElementById('console');
 const lblBaudrate = document.getElementById('lblBaudrate');
 const lblConnTo = document.getElementById('lblConnTo');
 const table = document.getElementById('fileTable');
@@ -31,8 +31,8 @@ let file1 = null;
 let connected = false;
 
 disconnectButton.style.display = 'none';
-eraseButton.style.display = 'none';
-consoleStopButton.style.display = 'none';
+// eraseButton.style.display = 'none';
+// consoleStopButton.style.display = 'none';
 filesDiv.style.display = 'none';
 
 
@@ -93,31 +93,31 @@ connectButton.onclick = async () => {
   disconnectButton.style.display = 'initial';
   eraseButton.style.display = 'initial';
   filesDiv.style.display = 'initial';
-  consoleDiv.style.display = 'none';
+  // consoleDiv.style.display = 'none';
 };
 
-resetButton.onclick = async () => {
-  if (device === null) {
-    device = await navigator.serial.requestPort({});
-    transport = new Transport(device);
-  }
+// resetButton.onclick = async () => {
+//   if (device === null) {
+//     device = await navigator.serial.requestPort({});
+//     transport = new Transport(device);
+//   }
 
-  await transport.setDTR(false);
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  await transport.setDTR(true);
-};
+//   await transport.setDTR(false);
+//   await new Promise((resolve) => setTimeout(resolve, 100));
+//   await transport.setDTR(true);
+// };
 
-eraseButton.onclick = async () => {
-  eraseButton.disabled = true;
-  try {
-    await esploader.erase_flash();
-  } catch (e) {
-    console.error(e);
-    term.writeln(`Error: ${e.message}`);
-  } finally {
-    eraseButton.disabled = false;
-  }
-};
+// eraseButton.onclick = async () => {
+//   eraseButton.disabled = true;
+//   try {
+//     await esploader.erase_flash();
+//   } catch (e) {
+//     console.error(e);
+//     term.writeln(`Error: ${e.message}`);
+//   } finally {
+//     eraseButton.disabled = false;
+//   }
+// };
 
 addFile.onclick = () => {
   var rowCount = table.rows.length;
@@ -128,7 +128,7 @@ addFile.onclick = () => {
   var element1 = document.createElement('input');
   element1.type = 'text';
   element1.id = 'offset' + rowCount;
-  element1.value = '0x1000';
+  element1.value = '0x10000';
   cell1.appendChild(element1);
 
   // Column 2 - File selector
@@ -187,44 +187,44 @@ disconnectButton.onclick = async () => {
   lblConnTo.style.display = 'none';
   filesDiv.style.display = 'none';
   alertDiv.style.display = 'none';
-  consoleDiv.style.display = 'initial';
+  // consoleDiv.style.display = 'initial';
   cleanUp();
 };
 
 let isConsoleClosed = false;
-consoleStartButton.onclick = async () => {
-  if (device === null) {
-    device = await navigator.serial.requestPort({});
-    transport = new Transport(device);
-  }
-  lblConsoleFor.style.display = 'block';
-  consoleStartButton.style.display = 'none';
-  consoleStopButton.style.display = 'initial';
-  programDiv.style.display = 'none';
+// consoleStartButton.onclick = async () => {
+//   if (device === null) {
+//     device = await navigator.serial.requestPort({});
+//     transport = new Transport(device);
+//   }
+//   lblConsoleFor.style.display = 'block';
+//   consoleStartButton.style.display = 'none';
+//   consoleStopButton.style.display = 'initial';
+//   programDiv.style.display = 'none';
 
-  await transport.connect();
-  isConsoleClosed = false;
+//   await transport.connect();
+//   isConsoleClosed = false;
 
-  while (true && !isConsoleClosed) {
-    let val = await transport.rawRead();
-    if (typeof val !== 'undefined') {
-      term.write(val);
-    } else {
-      break;
-    }
-  }
-  console.log('quitting console');
-};
+//   while (true && !isConsoleClosed) {
+//     let val = await transport.rawRead();
+//     if (typeof val !== 'undefined') {
+//       term.write(val);
+//     } else {
+//       break;
+//     }
+//   }
+//   console.log('quitting console');
+// };
 
-consoleStopButton.onclick = async () => {
-  isConsoleClosed = true;
-  await transport.disconnect();
-  await transport.waitForUnlock(1500);
-  term.clear();
-  consoleStartButton.style.display = 'initial';
-  consoleStopButton.style.display = 'none';
-  programDiv.style.display = 'initial';
-};
+// consoleStopButton.onclick = async () => {
+//   isConsoleClosed = true;
+//   await transport.disconnect();
+//   await transport.waitForUnlock(1500);
+//   term.clear();
+//   consoleStartButton.style.display = 'initial';
+//   consoleStopButton.style.display = 'none';
+//   programDiv.style.display = 'initial';
+// };
 
 function validate_program_inputs() {
   let offsetArr = [];
