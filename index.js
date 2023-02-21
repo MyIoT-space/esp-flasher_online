@@ -296,5 +296,4 @@ programButton.onclick = async () => {
     }
   }
 };
-const selectElement = document.querySelector('.ice-cream');
 addFile.onclick();
