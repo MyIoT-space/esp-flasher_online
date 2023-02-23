@@ -98,7 +98,7 @@ connectButton.onclick = async () => {
 
   console.log('Settings done for :' + chip);
   // lblBaudrate.style.display = 'none';
-  lblConnTo.innerHTML = 'Conectado ao dispositivo: ' + placa_val;
+  lblConnTo.innerHTML = 'Configurando o dispositivo: ' + placa_val;
   lblConnTo.style.display = 'block';
   // baudrates.style.display = 'none';
   connectButton.style.display = 'none';
