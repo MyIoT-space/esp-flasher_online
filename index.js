@@ -1,4 +1,4 @@
-const baudrates = document.getElementById('baudrates');
+// const baudrates = document.getElementById('baudrates');
 const connectButton = document.getElementById('connectButton');
 const disconnectButton = document.getElementById('disconnectButton');
 // const resetButton = document.getElementById('resetButton');
@@ -10,12 +10,12 @@ const filesDiv = document.getElementById('files');
 const terminal = document.getElementById('terminal');
 const programDiv = document.getElementById('program');
 // const consoleDiv = document.getElementById('console');
-const lblBaudrate = document.getElementById('lblBaudrate');
+// const lblBaudrate = document.getElementById('lblBaudrate');
 const lblConnTo = document.getElementById('lblConnTo');
 const table = document.getElementById('fileTable');
 const alertDiv = document.getElementById('alertDiv');
-const boards = document.getElementById('boards');
-
+const placa = document.getElementById('placa');
+const endereco_firm = document.getElementById('endereco_firm');
 
 // import { Transport } from './cp210x-webusb.js'
 import * as esptooljs from "./bundle.js";
@@ -36,7 +36,16 @@ disconnectButton.style.display = 'none';
 eraseButton.style.display = 'none';
 // consoleStopButton.style.display = 'none';
 filesDiv.style.display = 'none';
+var endereco_firm_val = document.getElementById("endereco_firm");
 
+var endereco_firm_val = document.cookie.replace(/(?:(?:^|.*;\s*)endereco_firm\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+// var placa_val = document.getElementById("placa");
+
+var placa_val = document.cookie.replace(/(?:(?:^|.*;\s*)placa\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+// placa.textContent = placa_val;
+endereco_firm.textContent = "Endereço do firmware: " + endereco_firm_val;
 
 function handleFileSelect(evt) {
   var file = evt.target.files[0];
@@ -74,7 +83,8 @@ connectButton.onclick = async () => {
   }
 
   try {
-    esploader = new ESPLoader(transport, baudrates.value, espLoaderTerminal);
+    esploader = new ESPLoader(transport, 921600, espLoaderTerminal);
+    // esploader = new ESPLoader(transport, baudrates.value, espLoaderTerminal);
     connected = true;
 
     chip = await esploader.main_fn();
@@ -87,10 +97,10 @@ connectButton.onclick = async () => {
   }
 
   console.log('Settings done for :' + chip);
-  lblBaudrate.style.display = 'none';
-  lblConnTo.innerHTML = 'Connected to device: ' + chip;
+  // lblBaudrate.style.display = 'none';
+  lblConnTo.innerHTML = 'Conectado ao dispositivo: ' + placa_val;
   lblConnTo.style.display = 'block';
-  baudrates.style.display = 'none';
+  // baudrates.style.display = 'none';
   connectButton.style.display = 'none';
   disconnectButton.style.display = 'initial';
   eraseButton.style.display = 'initial';
@@ -130,23 +140,27 @@ addFile.onclick = () => {
   var element1 = document.createElement('input');
   element1.type = 'text';
   element1.id = 'offset' + rowCount;
-  console.log(boards.value)
   element1.value = '0x100';
-  // if (boards.value()== "ESP32") {
-  //   // console.log("esp32 normal irmao");
-  //   element1.value = '0x100000';
-  // }
-  // if (boards.value()== "ESPCAM") {
-  //   // console.log("espcam");
-  //   element1.value = '0x100000';
-  // }
-  // if (boards.value()== "ESP12") {
-  //   // console.log("esp8266");
-  //   element1.value = '0x1000000';
-  // }
+  if (placa_val == "ESP32_DEVKIT") {
+    // console.log("esp32 normal irmao");
+    element1.value = '0x10000';
+  }
+  else if (placa_val == "ESPCAM") {
+    // console.log("espcam");
+    element1.value = '0x100000';
+  }
+  else if (placa_val == "ESP8266") {
+    // console.log("esp8266");
+    element1.value = '0x1000000';
+  }
+  else {
+	console.log(placa_val)
+    element1.value = 'coco';
+  }
+
   cell1.appendChild(element1);
 
-  
+
 
   // Column 2 - File selector
   var cell2 = row.insertCell(1);
@@ -174,7 +188,7 @@ addFile.onclick = () => {
     element4.setAttribute('class', 'btn');
     element4.setAttribute('value', 'Remove'); // or element1.value = "button";
     element4.onclick = function () {
-    removeRow(row);
+      removeRow(row);
     };
     cell4.appendChild(element4);
   }
@@ -197,7 +211,7 @@ disconnectButton.onclick = async () => {
 
   term.clear();
   connected = false;
-  baudrates.style.display = 'initial';
+  // baudrates.style.display = 'initial';
   connectButton.style.display = 'initial';
   disconnectButton.style.display = 'none';
   eraseButton.style.display = 'none';
