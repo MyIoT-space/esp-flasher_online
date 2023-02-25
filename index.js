@@ -175,7 +175,11 @@ disconnectButton.onclick = async () => {
 };
 
 // let isConsoleClosed = false;
+const progressBar = document.querySelector('.progress-bar');
 
+function updateProgressBar(progress) {
+  progressBar.style.width = progress + '%';
+}
 
 programButton.onclick = async () => {
     const alertMsg = document.getElementById('alertmsg');
@@ -235,7 +239,9 @@ programButton.onclick = async () => {
             true,
             (fileIndex, written, total) => {
     		const percentComplete = (written / total) * 100;
-    		console.log(`Flashing file ${fileIndex}:${percentComplete.toFixed(2)}%`);},
+    		console.log(`Flashing file ${fileIndex}:${percentComplete.toFixed(2)}%`);
+			updateProgressBar(percentComplete);
+			},
             (image) => CryptoJS.MD5(CryptoJS.enc.Latin1.parse(image))
         );
 
@@ -247,11 +253,12 @@ programButton.onclick = async () => {
     } catch (e) {
         console.error(e);
         term.writeln(`Error: ${e.message}`);
-    } finally {
-        // Hide progress bars and show erase buttons
-        for (let index = 1; index < table.rows.length; index++) {
-            table.rows[index].cells[2].style.display = 'none';
-            table.rows[index].cells[3].style.display = 'initial';
-        }
-    }
+    } 
+	// finally {
+ //        // Hide progress bars and show erase buttons
+ //        for (let index = 1; index < table.rows.length; index++) {
+ //            table.rows[index].cells[2].style.display = 'none';
+ //            table.rows[index].cells[3].style.display = 'initial';
+ //        }
+ //    }
 };
