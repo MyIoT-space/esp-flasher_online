@@ -23,13 +23,11 @@
         <div class="container" id="main">
             <hr/>
             <div id="program">
-<!--                 <h3 > Programar! </h3> -->
-<!-- 				<h4 id="endereco_firm"> Endereço do firmware: </h4> -->
-<!--                 <label for="baudrates" id="lblBaudrate">Baudrate:</label> -->
                 <label style="display:none" id="lblConnTo">Connected to device: </label>
 				<div id="botoes_conectar_apagar" >
 	                <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Conectar" />
 	                <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Desconectar" />
+					<input class="btn btn-info btn-sm" type="button" id="programButton" value="Programar" />
 	                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Apagar Flash" />
                 <br>
 				</div>
@@ -38,36 +36,11 @@
                     <span id="alertmsg"></span>
                 </div>
 
-                <div id="files">
-                    <table class="table table-striped" id="fileTable">
-<!--                         <thead class="thead-light">
-                            <tr>
-                                <th>Flash Address</th>
-                                <th>File</th>
-                                <th></th>
-                            </tr>
-                        </thead> -->
-<!--                         <tbody id="tableBody">
-                        </tbody> -->
-                    </table>
-                    <input class="btn btn-info btn-sm" type="button" id="addFile" value="Adicionar arquivo" />
-                    <input class="btn btn-info btn-sm" type="button" id="programButton" value="Programar" />
-                </div>
                 <output id="list"></output>
                 <hr/>
             </div>
             <div id="console">
-<!--                 <h3>Placa: </h3>
-                <select name="BOARDS" id="boards">
-                    <option value="ESP32">ESP-32</option>
-                    <option value="ESPCAM">ESP-CAM</option>
-                    <option value="ESP12">ESP-8266</option>
-                </select> -->
                 <label style="display:none" id="lblConsoleFor">Connected to device: </label>
-<!--                 <input class="btn btn-info" type="button" id="consoleStartButton" value="Start" />
-                <input class="btn btn-info" type="button" id="consoleStopButton" value="Stop" /> -->
-<!--                 <input class="btn btn-info" type="button" id="resetButton" value="Reset" />
-                <hr/> -->
             </div>
             <div id="terminal"></div>
         </div>

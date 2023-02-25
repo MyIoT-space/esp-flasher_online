@@ -6,17 +6,12 @@ const disconnectButton = document.getElementById('disconnectButton');
 // const consoleStopButton = document.getElementById('consoleStopButton');
 const eraseButton = document.getElementById('eraseButton');
 const programButton = document.getElementById('programButton');
-const filesDiv = document.getElementById('files');
 const terminal = document.getElementById('terminal');
 const programDiv = document.getElementById('program');
-// const consoleDiv = document.getElementById('console');
-// const lblBaudrate = document.getElementById('lblBaudrate');
 const lblConnTo = document.getElementById('lblConnTo');
 const table = document.getElementById('fileTable');
 const alertDiv = document.getElementById('alertDiv');
 const placa = document.getElementById('placa');
-// const endereco_firm = document.getElementById('endereco_firm');
-const addFile = document.getElementById('addFile');//isso nao tinha e nao sei como funfava
 
 import * as esptooljs from "./bundle.js";
 
@@ -34,11 +29,13 @@ let esploader;
 let file1 = null;
 let connected = false;
 
-addFile.style.display = 'none';
+// addFile.style.display = 'none';
 disconnectButton.style.display = 'none';
 eraseButton.style.display = 'none';
+programButton.style.display = 'none';
+
 // consoleStopButton.style.display = 'none';
-filesDiv.style.display = 'none';
+// filesDiv.style.display = 'none';
 // var endereco_firm_val = document.getElementById("endereco_firm");
 
 var endereco_firm_val = "https://" + document.cookie.replace(/(?:(?:^|.*;\s*)endereco_firm\s*\=\s*([^;]*).*$)|^.*$/, "$1");
@@ -117,47 +114,30 @@ connectButton.onclick = async () => {
     let speed = 921600;
 
     if (placa_val == "ESP8266") {
-        console.log("mudando para 115200");
+        console.log("mudando para 115200, visto que é uma ESP8266");
         speed = 115200;
     }
 
 
     try {
         esploader = new ESPLoader(transport, speed, espLoaderTerminal);
-        // esploader = new ESPLoader(transport, baudrates.value, espLoaderTerminal);
         connected = true;
 
         chip = await esploader.main_fn();
 
-        // Temporarily broken
-        // await esploader.flash_id();
     } catch (e) {
         console.error(e);
         term.writeln(`Error: ${e.message}`);
     }
 
     console.log('Settings done for :' + chip);
-    // lblBaudrate.style.display = 'none';
     lblConnTo.innerHTML = 'Configurando o dispositivo: ' + placa_val;
     lblConnTo.style.display = 'block';
-    // baudrates.style.display = 'none';
     connectButton.style.display = 'none';
     disconnectButton.style.display = 'initial';
     eraseButton.style.display = 'initial';
-    filesDiv.style.display = 'initial';
-    // consoleDiv.style.display = 'none';
+    programButton.style.display = 'initial';
 };
-
-// resetButton.onclick = async () => {
-//   if (device === null) {
-//     device = await navigator.serial.requestPort({});
-//     transport = new Transport(device);
-//   }
-
-//   await transport.setDTR(false);
-//   await new Promise((resolve) => setTimeout(resolve, 100));
-//   await transport.setDTR(true);
-// };
 
 eraseButton.onclick = async () => {
     eraseButton.disabled = true;
@@ -170,61 +150,6 @@ eraseButton.onclick = async () => {
         eraseButton.disabled = false;
     }
 };
-
-// addFile.onclick = () => {
-//     var rowCount = table.rows.length;
-//     var row = table.insertRow(rowCount);
-
-//     //Column 1 - Offset
-//     var cell1 = row.insertCell(0);
-//     var element1 = document.createElement('input');
-//     element1.type = 'text';
-//     element1.id = 'offset' + rowCount;
-//     element1.classList.add('para_esconder');
-//     element1.value = '0x0';
-
-//     cell1.appendChild(element1);
-
-//     var cell2 = row.insertCell(1);
-
-
-//     // Column 2 - File selector
-//     var cell2 = row.insertCell(1);
-//     var element2 = document.createElement('input');
-//     element2.type = 'file';
-//     element2.id = 'selectFile' + rowCount;
-//     element2.name = 'selected_File' + rowCount;
-//     element2.classList.add('para_esconder');
-//     element2.addEventListener('change', handleFileSelect, false);
-//     cell2.appendChild(element2);
-
-//     // Column 3  - Progress
-//     var cell3 = row.insertCell(2);
-//     cell3.classList.add('progress-cell');
-//     cell3.style.display = 'block';
-//     cell3.innerHTML = `<progress value="0" max="100"></progress>`;
-
-//     // Column 4  - Remove File
-//     var cell4 = row.insertCell(3);
-//     cell4.classList.add('action-cell');
-//     if (rowCount > 1) {
-//         var element4 = document.createElement('input');
-//         element4.type = 'button';
-//         var btnName = 'button' + rowCount;
-//         element4.name = btnName;
-//         element4.setAttribute('class', 'btn');
-//         element4.setAttribute('value', 'Remove'); // or element1.value = "button";
-//         element4.onclick = a () {
-//             removeRow(row);
-//         };
-//         cell4.appendChild(element4);
-//     }
-// };
-
-// function removeRow(row) {
-//     const rowIndex = Array.from(table.rows).indexOf(row);
-//     table.deleteRow(rowIndex);
-// }
 
 // to be called on disconnect - remove any stale references of older connections if any
 function cleanUp() {
@@ -243,7 +168,7 @@ disconnectButton.onclick = async () => {
     disconnectButton.style.display = 'none';
     eraseButton.style.display = 'none';
     lblConnTo.style.display = 'none';
-    filesDiv.style.display = 'none';
+    // filesDiv.style.display = 'none';
     alertDiv.style.display = 'none';
     // consoleDiv.style.display = 'initial';
     cleanUp();
@@ -251,69 +176,12 @@ disconnectButton.onclick = async () => {
 
 // let isConsoleClosed = false;
 
-function validate_program_inputs() {
-    let offsetArr = [];
-    var rowCount = table.rows.length;
-    var row;
-    let offset = 0;
-    let fileData = null;
-
-    // check for mandatory fields
-    for (let index = 1; index < rowCount; index++) {
-        row = table.rows[index];
-
-        //offset fields checks
-        var offSetObj = row.cells[0].childNodes[0];
-        offset = parseInt(offSetObj.value);
-
-        // Non-numeric or blank offset
-        if (Number.isNaN(offset)) return 'Offset field in row ' + index + ' is not a valid address!';
-        // Repeated offset used
-        else if (offsetArr.includes(offset)) return 'Offset field in row ' + index + ' is already in use!';
-        else offsetArr.push(offset);
-
-        // var fileObj = row.cells[1].childNodes[0];
-        // fileData = fileObj.data;
-        // if (fileData == null) return 'No file selected for row ' + index + '!';
-    }
-    return 'success';
-}
 
 programButton.onclick = async () => {
     const alertMsg = document.getElementById('alertmsg');
-    const err = validate_program_inputs();
-
-    if (err != 'success') {
-        alertMsg.innerHTML = '<strong>' + err + '</strong>';
-        alertDiv.style.display = 'block';
-        return;
-    }
 
     // Hide error message
     alertDiv.style.display = 'none';
-
-    // const fileArray = [];
-    const progressBars = [];
-
-    for (let index = 1; index < table.rows.length; index++) {
-        const row = table.rows[index];
-
-        const offSetObj = row.cells[0].childNodes[0];
-        const offset = parseInt(offSetObj.value);
-
-        const fileObj = row.cells[1].childNodes[0];
-        const progressBar = row.cells[2].childNodes[0];
-
-        progressBar.value = 0;
-        progressBars.push(progressBar);
-
-        row.cells[2].style.display = 'initial';
-        row.cells[3].style.display = 'none';
-
-        // fileArray.push({ data: fileObj.data, address: offset });
-        // fileArray.push({ data: fileObj.data, address: offset });
-
-    }
 
     async function fetchAndReadBinaryString(url) {
         const response = await fetch(url);
@@ -332,7 +200,6 @@ programButton.onclick = async () => {
 	// await esploader.erase_region(0x8000, 0x8FFF);
 	// await esploader.erase_region(0xe000, 0xFFFF);
 	// await esploader.erase_region(0x10000, 0x46FFF);
-
 
     const main_firmware = await fetchAndReadBinaryString(endereco_firm_val);
 
@@ -388,4 +255,3 @@ programButton.onclick = async () => {
         }
     }
 };
-// addFile.onclick();
