@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>MyIot Flasher</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://espflasher.leonuzzy.repl.co/assets/aparencia.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
         <link
             href="https://fonts.googleapis.com/css?family=Orbitron"
@@ -23,16 +23,16 @@
         <div class="container" id="main">
             <hr/>
             <div id="program">
-                <h3> Programar! </h3>
-				<h4 id="endereco_firm"> Endereço do firmware: </h4>
+<!--                 <h3 > Programar! </h3> -->
+<!-- 				<h4 id="endereco_firm"> Endereço do firmware: </h4> -->
 <!--                 <label for="baudrates" id="lblBaudrate">Baudrate:</label> -->
                 <label style="display:none" id="lblConnTo">Connected to device: </label>
-
-                <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Connect" />
-                <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Disconnect" />
-                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Erase Flash" />
+				<div id="botoes_conectar_apagar" >
+	                <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Conectar" />
+	                <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Desconectar" />
+	                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Apagar Flash" />
                 <br>
-
+				</div>
                 <div class="alert alert-danger alert-dismissible" id="alertDiv" style="display:none; margin-top:10px">
                     <a href="#" class="close" aria-label="close" onclick="$('.alert').hide()">&times;</a>
                     <span id="alertmsg"></span>
@@ -50,8 +50,8 @@
                         <tbody id="tableBody">
                         </tbody>
                     </table>
-                    <input class="btn btn-info btn-sm" type="button" id="addFile" value="Add File" />
-                    <input class="btn btn-info btn-sm" type="button" id="programButton" value="Program" />
+                    <input class="btn btn-info btn-sm" type="button" id="addFile" value="Adicionar arquivo" />
+                    <input class="btn btn-info btn-sm" type="button" id="programButton" value="Programar" />
                 </div>
                 <output id="list"></output>
                 <hr/>
