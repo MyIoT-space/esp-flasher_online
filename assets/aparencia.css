@@ -7,7 +7,8 @@
 html {
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%
+    -webkit-text-size-adjust: 100%;
+	background-color: blue
 }
 
 body {
@@ -312,7 +313,7 @@ th {
 
     .table td,
     .table th {
-        background-color: #fff !important
+/*         background-color: #fff !important */
     }
 
     .table-bordered td,
@@ -1411,7 +1412,7 @@ body {
     font-size: 14px;
     line-height: 1.42857143;
     color: #333;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 button,
@@ -1464,7 +1465,7 @@ img {
 .img-thumbnail {
     padding: 4px;
     line-height: 1.42857143;
-    background-color: #fff;
+/*     background-color: #fff; */
     border: 1px solid #ddd;
     border-radius: 4px;
     -webkit-transition: all .2s ease-in-out;
@@ -1526,7 +1527,7 @@ h6 {
     font-family: inherit;
     font-weight: 500;
     line-height: 1.1;
-    color: inherit
+    color: white
 }
 
 .h1 .small,
@@ -1626,6 +1627,7 @@ h3 {
 .h4,
 h4 {
     font-size: 18px
+
 }
 
 .h5,
@@ -3046,7 +3048,7 @@ th {
 }
 
 .table .table {
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .table-condensed>tbody>tr>td,
@@ -3344,7 +3346,7 @@ output {
     font-size: 14px;
     line-height: 1.42857143;
     color: #555;
-    background-color: #fff;
+/*     background-color: #fff; */
     background-image: none;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -3925,7 +3927,7 @@ fieldset[disabled] a.btn {
 
 .btn-default {
     color: #333;
-    background-color: #fff;
+/*     background-color: #fff; */
     border-color: #ccc
 }
 
@@ -3974,7 +3976,7 @@ fieldset[disabled] a.btn {
 fieldset[disabled] .btn-default.focus,
 fieldset[disabled] .btn-default:focus,
 fieldset[disabled] .btn-default:hover {
-    background-color: #fff;
+/*     background-color: #fff; */
     border-color: #ccc
 }
 
@@ -4040,7 +4042,7 @@ fieldset[disabled] .btn-primary:hover {
 
 .btn-primary .badge {
     color: #337ab7;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .btn-success {
@@ -4100,7 +4102,7 @@ fieldset[disabled] .btn-success:hover {
 
 .btn-success .badge {
     color: #5cb85c;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .btn-info {
@@ -4160,7 +4162,7 @@ fieldset[disabled] .btn-info:hover {
 
 .btn-info .badge {
     color: #5bc0de;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .btn-warning {
@@ -4220,7 +4222,7 @@ fieldset[disabled] .btn-warning:hover {
 
 .btn-warning .badge {
     color: #f0ad4e;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .btn-danger {
@@ -4280,7 +4282,7 @@ fieldset[disabled] .btn-danger:hover {
 
 .btn-danger .badge {
     color: #d9534f;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .btn-link {
@@ -4440,7 +4442,7 @@ tbody.collapse.in {
     font-size: 14px;
     text-align: left;
     list-style: none;
-    background-color: #fff;
+/*     background-color: #fff; */
     background-clip: padding-box;
     border: 1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, .15);
@@ -5041,7 +5043,7 @@ textarea.input-group-sm>.input-group-btn>.btn {
 .nav-tabs>li.active>a:hover {
     color: #555;
     cursor: default;
-    background-color: #fff;
+/*     background-color: #fff; */
     border: 1px solid #ddd;
     border-bottom-color: transparent
 }
@@ -5806,7 +5808,7 @@ fieldset[disabled] .navbar-default .btn-link:hover {
 }
 
 .navbar-inverse .navbar-toggle .icon-bar {
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .navbar-inverse .navbar-collapse,
@@ -5880,7 +5882,7 @@ fieldset[disabled] .navbar-inverse .btn-link:hover {
     line-height: 1.42857143;
     color: #337ab7;
     text-decoration: none;
-    background-color: #fff;
+/*     background-color: #fff; */
     border: 1px solid #ddd
 }
 
@@ -5928,7 +5930,7 @@ fieldset[disabled] .navbar-inverse .btn-link:hover {
 .pagination>.disabled>span:hover {
     color: #777;
     cursor: not-allowed;
-    background-color: #fff;
+/*     background-color: #fff; */
     border-color: #ddd
 }
 
@@ -5985,7 +5987,7 @@ fieldset[disabled] .navbar-inverse .btn-link:hover {
 .pager li>span {
     display: inline-block;
     padding: 5px 14px;
-    background-color: #fff;
+/*     background-color: #fff; */
     border: 1px solid #ddd;
     border-radius: 15px
 }
@@ -6012,7 +6014,7 @@ fieldset[disabled] .navbar-inverse .btn-link:hover {
 .pager .disabled>span {
     color: #777;
     cursor: not-allowed;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .label {
@@ -6138,7 +6140,7 @@ a.badge:hover {
 .list-group-item.active>.badge,
 .nav-pills>.active>a>.badge {
     color: #337ab7;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .list-group-item>.badge {
@@ -6210,7 +6212,7 @@ a.badge:hover {
     padding: 4px;
     margin-bottom: 20px;
     line-height: 1.42857143;
-    background-color: #fff;
+/*     background-color: #fff; */
     border: 1px solid #ddd;
     border-radius: 4px;
     -webkit-transition: border .2s ease-in-out;
@@ -6512,7 +6514,7 @@ a.thumbnail:hover {
     display: block;
     padding: 10px 15px;
     margin-bottom: -1px;
-    background-color: #fff;
+/*     background-color: #fff; */
     border: 1px solid #ddd
 }
 
@@ -6746,7 +6748,7 @@ button.list-group-item-danger.active:hover {
 
 .panel {
     margin-bottom: 20px;
-    background-color: #fff;
+/*     background-color: #fff; */
     border: 1px solid transparent;
     border-radius: 4px;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
@@ -7057,7 +7059,7 @@ button.list-group-item-danger.active:hover {
 
 .panel-primary>.panel-heading .badge {
     color: #337ab7;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .panel-primary>.panel-footer+.panel-collapse>.panel-body {
@@ -7291,7 +7293,7 @@ button.close {
 
 .modal-content {
     position: relative;
-    background-color: #fff;
+/*     background-color: #fff; */
     background-clip: padding-box;
     border: 1px solid #999;
     border: 1px solid rgba(0, 0, 0, .2);
@@ -7543,7 +7545,7 @@ button.close {
     word-wrap: normal;
     white-space: normal;
     font-size: 14px;
-    background-color: #fff;
+/*     background-color: #fff; */
     background-clip: padding-box;
     border: 1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, .2);
@@ -7878,7 +7880,7 @@ button.close {
     width: 12px;
     height: 12px;
     margin: 0;
-    background-color: #fff
+/*     background-color: #fff */
 }
 
 .carousel-caption {

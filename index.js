@@ -171,60 +171,60 @@ eraseButton.onclick = async () => {
     }
 };
 
-addFile.onclick = () => {
-    var rowCount = table.rows.length;
-    var row = table.insertRow(rowCount);
+// addFile.onclick = () => {
+//     var rowCount = table.rows.length;
+//     var row = table.insertRow(rowCount);
 
-    //Column 1 - Offset
-    var cell1 = row.insertCell(0);
-    var element1 = document.createElement('input');
-    element1.type = 'text';
-    element1.id = 'offset' + rowCount;
-    element1.classList.add('para_esconder');
-    element1.value = '0x0';
+//     //Column 1 - Offset
+//     var cell1 = row.insertCell(0);
+//     var element1 = document.createElement('input');
+//     element1.type = 'text';
+//     element1.id = 'offset' + rowCount;
+//     element1.classList.add('para_esconder');
+//     element1.value = '0x0';
 
-    cell1.appendChild(element1);
+//     cell1.appendChild(element1);
 
-    var cell2 = row.insertCell(1);
+//     var cell2 = row.insertCell(1);
 
 
-    // Column 2 - File selector
-    var cell2 = row.insertCell(1);
-    var element2 = document.createElement('input');
-    element2.type = 'file';
-    element2.id = 'selectFile' + rowCount;
-    element2.name = 'selected_File' + rowCount;
-    element2.classList.add('para_esconder');
-    element2.addEventListener('change', handleFileSelect, false);
-    cell2.appendChild(element2);
+//     // Column 2 - File selector
+//     var cell2 = row.insertCell(1);
+//     var element2 = document.createElement('input');
+//     element2.type = 'file';
+//     element2.id = 'selectFile' + rowCount;
+//     element2.name = 'selected_File' + rowCount;
+//     element2.classList.add('para_esconder');
+//     element2.addEventListener('change', handleFileSelect, false);
+//     cell2.appendChild(element2);
 
-    // Column 3  - Progress
-    var cell3 = row.insertCell(2);
-    cell3.classList.add('progress-cell');
-    cell3.style.display = 'block';
-    cell3.innerHTML = `<progress value="0" max="100"></progress>`;
+//     // Column 3  - Progress
+//     var cell3 = row.insertCell(2);
+//     cell3.classList.add('progress-cell');
+//     cell3.style.display = 'block';
+//     cell3.innerHTML = `<progress value="0" max="100"></progress>`;
 
-    // Column 4  - Remove File
-    var cell4 = row.insertCell(3);
-    cell4.classList.add('action-cell');
-    if (rowCount > 1) {
-        var element4 = document.createElement('input');
-        element4.type = 'button';
-        var btnName = 'button' + rowCount;
-        element4.name = btnName;
-        element4.setAttribute('class', 'btn');
-        element4.setAttribute('value', 'Remove'); // or element1.value = "button";
-        element4.onclick = function () {
-            removeRow(row);
-        };
-        cell4.appendChild(element4);
-    }
-};
+//     // Column 4  - Remove File
+//     var cell4 = row.insertCell(3);
+//     cell4.classList.add('action-cell');
+//     if (rowCount > 1) {
+//         var element4 = document.createElement('input');
+//         element4.type = 'button';
+//         var btnName = 'button' + rowCount;
+//         element4.name = btnName;
+//         element4.setAttribute('class', 'btn');
+//         element4.setAttribute('value', 'Remove'); // or element1.value = "button";
+//         element4.onclick = a () {
+//             removeRow(row);
+//         };
+//         cell4.appendChild(element4);
+//     }
+// };
 
-function removeRow(row) {
-    const rowIndex = Array.from(table.rows).indexOf(row);
-    table.deleteRow(rowIndex);
-}
+// function removeRow(row) {
+//     const rowIndex = Array.from(table.rows).indexOf(row);
+//     table.deleteRow(rowIndex);
+// }
 
 // to be called on disconnect - remove any stale references of older connections if any
 function cleanUp() {
@@ -339,8 +339,11 @@ programButton.onclick = async () => {
     let fileArray;
     if (placa_val === "ESP32_DEVKIT" || placa_val === "ESPCAM")   {  
 		const bootloader = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/bootloader.bin");
+		console.log("baixou bootloader");
 		const partitions = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/partitions.bin");
-    fileArray = [
+		console.log("baixou partitions");
+
+    	fileArray = [
             { data: bootloader, address: 0x1000 },
             { data: partitions, address: 0x8000 },
             { data: main_firmware, address: 0x10000 },
@@ -354,6 +357,8 @@ programButton.onclick = async () => {
     //esp32 principal 0x10000
     //esp8266 principal 0x0
     try {
+		console.log("começando o flash");
+
         await esploader.write_flash(
             fileArray,
             'keep',
@@ -361,11 +366,17 @@ programButton.onclick = async () => {
             undefined,
             false,
             true,
-            // (fileIndex, written, total) => {
-            //     progressBars[fileIndex].value = (written / total) * 100;
-            // },
-            (image) => CryptoJS.MD5(CryptoJS.enc.Latin1.parse(image)),
+            (fileIndex, written, total) => {
+    		const percentComplete = (written / total) * 100;
+    		console.log(`Flashing file ${fileIndex}:${percentComplete.toFixed(2)}%`);},
+            (image) => CryptoJS.MD5(CryptoJS.enc.Latin1.parse(image))
         );
+
+			//reset automatico depois do flash
+		  await transport.setDTR(false);
+		  await new Promise((resolve) => setTimeout(resolve, 100));
+		  await transport.setDTR(true);
+	
     } catch (e) {
         console.error(e);
         term.writeln(`Error: ${e.message}`);
@@ -377,4 +388,4 @@ programButton.onclick = async () => {
         }
     }
 };
-addFile.onclick();
+// addFile.onclick();
