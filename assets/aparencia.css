@@ -4,8 +4,9 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
 html {
-    font-family: sans-serif;
+	font-family: 'Quicksand', sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
 	background-color:  #28477e;
@@ -1408,7 +1409,7 @@ html {
 }
 
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+   	font-family: 'Quicksand', sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
     color: #333;
@@ -4602,7 +4603,11 @@ tbody.collapse.in {
 .btn-group .btn-group+.btn-group {
     margin-left: -1px
 }
-
+.nome_placa{
+	display:flex;
+	justify-content:center;
+	color:white
+}
 .btn-toolbar {
     margin-left: -5px
 }
@@ -6331,13 +6336,18 @@ a.thumbnail:hover {
     color: #843534
 }
 .progress {
-  height: 30px;
+  height: 35px;
   background-color: #f0f0f0;
   border-radius: 10px;
   overflow: hidden;
- margin-bottom:20px
+  margin-bottom:20px
 }
 
+.error{
+	align-content: center;
+    display: flex;
+    justify-content: center;
+}
 .progress-bar {
   height: 100%;
   background-color: #007bff;

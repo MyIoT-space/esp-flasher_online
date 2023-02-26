@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>MyIot Flasher</title>
+        <title>ESP Flasher</title>
         <link rel="stylesheet" href="https://espflasher.leonuzzy.repl.co/assets/aparencia.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css">
         <link
@@ -16,20 +16,19 @@
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <h1 align="center"><p><img src="/assets/flasher.png" width="42" height="42" style="vertical-align:middle"></img> MyIoT Flasher</p></h1>
-        <h4 align="center">Flasher online para ESPs do MyIoT</h4>
+        <h1 align="center"><p><img src="/assets/flasher.png" width="42" height="42" style="vertical-align:middle"></img> ESP Flasher </p></h1>
+        <h4 align="center">Flasher online para ESPs</h4>
         <div id="safariErr" style="display:none"><p align="center" style="color:red">This tool is not supported on Safari browser!</p>
         </div>
         <div class="container" id="main">
             <hr/>
             <div id="program">
-                <label style="display:none" id="lblConnTo">Connected to device: </label>
+                <label id="nome_placa">Connected to device: </label>
 				<div id="botoes_conectar_apagar" >
 	                <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Conectar" />
 	                <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Desconectar" />
 					<input class="btn btn-info btn-sm" type="button" id="programButton" value="Programar" />
 	                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Apagar Flash" />
-                <br>
 				</div>
                 <div class="alert alert-danger alert-dismissible" id="alertDiv" style="display:none; margin-top:10px">
                     <a href="#" class="close" aria-label="close" onclick="$('.alert').hide()">&times;</a>
@@ -42,8 +41,11 @@
             <div id="console">
                 <label style="display:none" id="lblConsoleFor">Connected to device: </label>
             </div>
-			<div class="progress">
+			<div class="progress" id="progress">
 		  		<div class="progress-bar" role="progressbar"></div>
+			</div>
+			<div class="error">
+		  		<h4 id="mensagem">Clique em conectar para começar!</h4>
 			</div>
             <div id="terminal"></div>
         </div>
