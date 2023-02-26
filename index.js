@@ -107,6 +107,7 @@ connectButton.onclick = async () => {
     // mensagem.style.display = 'initial';
     mensagem.textContent = e;
     mensagem.style.color = 'red';
+    disconnectButton.style.display = 'initial';
     console.error(e);
     term.writeln(`Error: ${e.message}`);
   }
@@ -117,7 +118,6 @@ connectButton.onclick = async () => {
   nome_placa.style.justifyContent = 'center';
   nome_placa.style.color = "white";
   connectButton.style.display = 'none';
-  disconnectButton.style.display = 'initial';
   eraseButton.style.display = 'initial';
   programButton.style.display = 'initial';
 };
@@ -130,6 +130,7 @@ eraseButton.onclick = async () => {
     mensagem.style.display = 'initial';
     mensagem.textContent = e;
     mensagem.style.color = 'red';
+    disconnectButton.style.display = 'initial';
     console.error(e);
     term.writeln(`Error: ${e.message}`);
   } finally {
@@ -146,8 +147,9 @@ function cleanUp() {
 
 disconnectButton.onclick = async () => {
   if (transport) await transport.disconnect();
-  term.clear();
   connected = false;
+  term.clear();
+  cleanUp();
   connectButton.style.display = 'initial';
   disconnectButton.style.display = 'none';
   eraseButton.style.display = 'none';
@@ -156,15 +158,6 @@ disconnectButton.onclick = async () => {
   mensagem.textContent = 'Clique em conectar para começar!';
   mensagem.style.color = 'white';
   updateProgressBar(0);
-  let transport2;
-  transport2 = new Transport(device);
-  await transport2.connect(115200);
-  await transport2.setDTR(false);
-  await new Promise((resolve) => setTimeout(resolve, 200));
-  await transport2.setDTR(true);
-  if (transport2) await transport2.disconnect();
-  console.log("desconectou tudinho");
-  cleanUp();
 };
 
 // let isConsoleClosed = false;
@@ -180,6 +173,8 @@ programButton.onclick = async () => {
   // Hide error message
   alertDiv.style.display = 'none';
   eraseButton.style.display = 'none';
+  programButton.style.display = "none";
+
 
   async function fetchAndReadBinaryString(url) {
     const response = await fetch(url);
@@ -224,7 +219,6 @@ programButton.onclick = async () => {
   try {
     console.log("começando o flash");
 	mensagem.textContent = "Realizando a programação da placa";
-	programButton.style.display = "none";
     await esploader.write_flash(
       fileArray,
       'keep',
@@ -242,21 +236,32 @@ programButton.onclick = async () => {
     );
 
     //reset automatico depois do flash
-    await transport.setDTR(false);
+    // await transport.setDTR(false);
+    // await new Promise((resolve) => setTimeout(resolve, 200));
+    // await transport.setDTR(true);
+    if (transport) await transport.disconnect();
+    connected = false;
+    updateProgressBar(0);
+    let transport2;
+    transport2 = new Transport(device);
+    await transport2.connect(115200);
+    await transport2.setDTR(false);
     await new Promise((resolve) => setTimeout(resolve, 200));
-    await transport.setDTR(true);
-
-    // await transport.chip_reset();
-
+    await transport2.setDTR(true);
+    if (transport2) await transport2.disconnect();
+    console.log("desconectou tudinho");
+    cleanUp();
     mensagem.style.display = 'initial';
     mensagem.textContent = "Finalizado com sucesso! (100%)";
     mensagem.style.color = 'white';
     progress.style.display = 'none';
     programButton.style.display = 'none';
+    disconnectButton.style.display = 'initial';
   } catch (e) {
     mensagem.style.display = 'initial';
     mensagem.textContent = e;
     mensagem.style.color = 'red';
+    disconnectButton.style.display = 'initial';
     console.error(e);
     term.writeln(`Error: ${e.message}`);
   }

@@ -22,10 +22,10 @@ def after_request(response):
 			placa = valor_url.split("/")[1]
 			endereco_firm = valor_url.split('https:/')[len(valor_url.split('https:/')) -
 			                                           1]
-			response.set_cookie('placa', placa, max_age=10, httponly=False)
+			response.set_cookie('placa', placa, max_age=15, httponly=False)
 			response.set_cookie('endereco_firm',
 			                    endereco_firm,
-			                    max_age=10,
+			                    max_age=15,
 			                    httponly=False)
 	return response
 
