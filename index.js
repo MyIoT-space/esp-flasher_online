@@ -99,8 +99,10 @@ connectButton.onclick = async () => {
 
     chip = await esploader.main_fn();
     progress.style.display = 'block';
-	eraseButton.style.display = 'initial';
-	mensagem.textContent = "Clique em programar para começar!";
+    eraseButton.style.display = 'initial';
+    mensagem.textContent = "Clique em programar para começar!";
+	const supportedChips = await esploader.detect_chip();
+	console.log(supportedChips);
 
 
   } catch (e) {
@@ -218,7 +220,7 @@ programButton.onclick = async () => {
   //esp8266 principal 0x0
   try {
     console.log("começando o flash");
-	mensagem.textContent = "Realizando a programação da placa";
+    mensagem.textContent = "Realizando a programação da placa";
     await esploader.write_flash(
       fileArray,
       'keep',
@@ -230,7 +232,7 @@ programButton.onclick = async () => {
         const percentComplete = (written / total) * 100;
         console.log(`Flashing file ${fileIndex}:${percentComplete.toFixed(2)}%`);
         updateProgressBar(percentComplete);
-		mensagem.textContent = `Realizando a programação da placa: ${percentComplete.toFixed(2)}%`;
+        mensagem.textContent = `Realizando a programação da placa: ${percentComplete.toFixed(2)}%`;
       },
       (image) => CryptoJS.MD5(CryptoJS.enc.Latin1.parse(image))
     );
