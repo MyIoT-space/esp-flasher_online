@@ -24,6 +24,7 @@ term.open(terminal);
 
 let device = null;
 let transport;
+let transport2;
 let chip = null;
 let esploader;
 let file1 = null;
@@ -48,11 +49,10 @@ botoes_conectar_apagar.style.justifyContent = 'space-evenly';
 botoes_conectar_apagar.style.alignContent = 'space-center';
 
 var endereco_firm_val = "https://" + document.cookie.replace(/(?:(?:^|.*;\s*)endereco_firm\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-// console.log(endereco_firm_val)
 
-var placa_val = document.cookie.replace(/(?:(?:^|.*;\s*)placa\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+var placa_va = document.cookie.replace(/(?:(?:^|.*;\s*)placa\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
-// placa_val = placa_val.replace(/_/g, " ");
+var placa_val = placa_va.replace(/_/g, " ");
 
 nome_placa.textContent = "Página para configuração do dispositivo: " + placa_val;
 function handleFileSelect(evt) {
@@ -89,7 +89,7 @@ connectButton.onclick = async () => {
     device = await navigator.serial.requestPort({});
     transport = new Transport(device);
   }
-  let speed = 921600;
+  let speed = 460800;
 
   if (placa_val == "ESP8266") {
     console.log("mudando para 115200, visto que é uma ESP8266");
@@ -104,6 +104,7 @@ connectButton.onclick = async () => {
     progress.style.display = 'block';
     eraseButton.style.display = 'initial';
     mensagem.textContent = "Clique em programar para começar!";
+	  
 	const chip_family = await esploader.chip.CHIP_NAME;
 	console.log(chip_family);
 	const mainText = 'This is the main text';
@@ -154,6 +155,7 @@ eraseButton.onclick = async () => {
 function cleanUp() {
   device = null;
   transport = null;
+  transport2 = null;
   chip = null;
 }
 
@@ -207,11 +209,11 @@ programButton.onclick = async () => {
   // await esploader.erase_region(0x8000, 0x8FFF);
   // await esploader.erase_region(0xe000, 0xFFFF);
   // await esploader.erase_region(0x10000, 0x46FFF);
-
+console.log(endereco_firm_val);
   const main_firmware = await fetchAndReadBinaryString(endereco_firm_val);
 
-  let fileArray;
-  if (placa_val === "ESP32_DEVKIT" || placa_val === "ESPCAM") {
+  let fileArray = null;
+  if (placa_val === "ESP32 DEVKIT" || placa_val === "ESPCAM") {
     const bootloader = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/bootloader.bin");
     console.log("baixou bootloader");
     const partitions = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/partitions.bin");
@@ -256,7 +258,7 @@ programButton.onclick = async () => {
     if (transport) await transport.disconnect();
     connected = false;
     updateProgressBar(0);
-    let transport2;
+    transport2;
     transport2 = new Transport(device);
     await transport2.connect(115200);
     await transport2.setDTR(false);
