@@ -37,9 +37,12 @@ programButton.style.display = 'none';
 // mensagem.style.display = 'none';
 mensagem.style.fontSize = '22px';
 progress.style.display = 'none';
-nome_placa.style.display = 'none';
+nome_placa.style.display = 'flex';
+nome_placa.style.justifyContent = 'center';
+nome_placa.style.color = "white";
 nome_placa.style.fontSize = "20px";
 nome_placa.style.marginBottom = "20px";
+
 botoes_conectar_apagar.style.display = 'flex';
 botoes_conectar_apagar.style.justifyContent = 'space-evenly';
 botoes_conectar_apagar.style.alignContent = 'space-center';
@@ -49,9 +52,9 @@ var endereco_firm_val = "https://" + document.cookie.replace(/(?:(?:^|.*;\s*)end
 
 var placa_val = document.cookie.replace(/(?:(?:^|.*;\s*)placa\s*\=\s*([^;]*).*$)|^.*$/, "$1");
 
-// placa.textContent = placa_val;
-// endereco_firm.textContent = "Endereço do firmware: " + endereco_firm_val;
+// placa_val = placa_val.replace(/_/g, " ");
 
+nome_placa.textContent = "Página para configuração do dispositivo: " + placa_val;
 function handleFileSelect(evt) {
   var file = evt.target.files[0];
 
@@ -101,9 +104,19 @@ connectButton.onclick = async () => {
     progress.style.display = 'block';
     eraseButton.style.display = 'initial';
     mensagem.textContent = "Clique em programar para começar!";
-	const supportedChips = await esploader.detect_chip();
-	console.log(supportedChips);
+	const chip_family = await esploader.chip.CHIP_NAME;
+	console.log(chip_family);
+	const mainText = 'This is the main text';
+	const searchText = 'main';
 
+if (placa_val.includes(chip_family)) {
+  console.log('Checagem completa, placa escolhida adequadamente');
+  nome_placa.textContent = 'Configurando o dispositivo: ' + placa_val;
+
+} else {
+  console.log('Cara bobo');
+  nome_placa.textContent = 'O dispositivo conectado é da familia ' + chip_family + " não um "+ placa_val+ " !!!";
+}
 
   } catch (e) {
     // mensagem.style.display = 'initial';
@@ -114,11 +127,8 @@ connectButton.onclick = async () => {
     term.writeln(`Error: ${e.message}`);
   }
 
-  console.log('Settings done for :' + chip);
-  nome_placa.textContent = 'Configurando o dispositivo: ' + placa_val;
+  // console.log('Settings done for :' + chip);
   nome_placa.style.display = 'flex';
-  nome_placa.style.justifyContent = 'center';
-  nome_placa.style.color = "white";
   connectButton.style.display = 'none';
   eraseButton.style.display = 'initial';
   programButton.style.display = 'initial';
@@ -159,6 +169,8 @@ disconnectButton.onclick = async () => {
   programButton.style.display = 'none';
   mensagem.textContent = 'Clique em conectar para começar!';
   mensagem.style.color = 'white';
+  nome_placa.textContent = 'Configurando o dispositivo: ' + placa_val;
+  // nome_placa.style.display = 'none';
   updateProgressBar(0);
 };
 
