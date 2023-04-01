@@ -35,7 +35,7 @@ disconnectButton.style.display = 'none';
 eraseButton.style.display = 'none';
 mensagem.style.marginBottom = "20px";
 programButton.style.display = 'none';
-// mensagem.style.display = 'none';
+// terminal.style.display = 'none';
 mensagem.style.fontSize = '22px';
 progress.style.display = 'none';
 nome_placa.style.display = 'flex';
@@ -89,50 +89,55 @@ connectButton.onclick = async () => {
     device = await navigator.serial.requestPort({});
     transport = new Transport(device);
   }
-  let speed = 460800;
+  let speed = 115200;
 
-  if (placa_val == "ESP8266") {
-    console.log("mudando para 115200, visto que é uma ESP8266");
-    speed = 115200;
-  }
-
+  // if (placa_val == "ESP8266") {
+  //   console.log("mudando para 115200, visto que é uma ESP8266");
+  //   speed = 115200;
+  // }
+    mensagem.style.color = "white";
   try {
     esploader = new ESPLoader(transport, speed, espLoaderTerminal);
-    connected = true;
-
+	setTimeout(() => {
+      if(!connected){mensagem.textContent = "Pressione e segure o botão de boot da sua placa!";
+					mensagem.style.color = "red";
+					mensagem.style.textShadow = "1px 1px 5px";}
+    }, 5000);
     chip = await esploader.main_fn();
+    connected = true;
     progress.style.display = 'block';
-    eraseButton.style.display = 'initial';
+    console.log("estamos aq pq sera");
+	mensagem.style.textShadow = "";
+	mensagem.style.color = "white";
     mensagem.textContent = "Clique em programar para começar!";
-	  
-	const chip_family = await esploader.chip.CHIP_NAME;
-	console.log(chip_family);
-	const mainText = 'This is the main text';
-	const searchText = 'main';
+    eraseButton.style.display = 'initial';
+    disconnectButton.style.display = 'initial';
+    const chip_family = await esploader.chip.CHIP_NAME;
+    console.log(chip_family);
 
-if (placa_val.includes(chip_family)) {
-  console.log('Checagem completa, placa escolhida adequadamente');
-  nome_placa.textContent = 'Configurando o dispositivo: ' + placa_val;
+    if (placa_val.includes(chip_family)) {
+      console.log('Checagem completa, placa escolhida adequadamente');
+      nome_placa.textContent = 'Configurando o dispositivo: ' + placa_val;
 
-} else {
-  console.log('Cara bobo');
-  nome_placa.textContent = 'O dispositivo conectado é da familia ' + chip_family + " não um "+ placa_val+ " !!!";
-}
-
+    } else {
+      console.log('Cara bobo');
+        console.log(placa_val);
+      nome_placa.textContent = 'O dispositivo conectado é da familia ' + chip_family + " não um " + placa_val + " !!!";
+    }
+    nome_placa.style.display = 'flex';
+    connectButton.style.display = 'none';
+    eraseButton.style.display = 'initial';
+    programButton.style.display = 'initial';
   } catch (e) {
     // mensagem.style.display = 'initial';
-    mensagem.textContent = e;
+    device = null;
+    if (transport) await transport.disconnect();
+    connected = false;
+    mensagem.textContent = e.message;
     mensagem.style.color = 'red';
-    disconnectButton.style.display = 'initial';
-    console.error(e);
+    console.error(e.message);
     term.writeln(`Error: ${e.message}`);
   }
-
-  // console.log('Settings done for :' + chip);
-  nome_placa.style.display = 'flex';
-  connectButton.style.display = 'none';
-  eraseButton.style.display = 'initial';
-  programButton.style.display = 'initial';
 };
 
 eraseButton.onclick = async () => {
@@ -141,10 +146,10 @@ eraseButton.onclick = async () => {
     await esploader.erase_flash();
   } catch (e) {
     mensagem.style.display = 'initial';
-    mensagem.textContent = e;
+    mensagem.textContent = e.message;
     mensagem.style.color = 'red';
     disconnectButton.style.display = 'initial';
-    console.error(e);
+    console.error(e.message);
     term.writeln(`Error: ${e.message}`);
   } finally {
     eraseButton.disabled = false;
@@ -209,11 +214,11 @@ programButton.onclick = async () => {
   // await esploader.erase_region(0x8000, 0x8FFF);
   // await esploader.erase_region(0xe000, 0xFFFF);
   // await esploader.erase_region(0x10000, 0x46FFF);
-console.log(endereco_firm_val);
+  console.log(endereco_firm_val);
   const main_firmware = await fetchAndReadBinaryString(endereco_firm_val);
 
   let fileArray = null;
-  if (placa_val === "ESP32 DEVKIT" || placa_val === "ESPCAM") {
+  if (placa_val === "ESP32 DEVKIT") {
     const bootloader = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/bootloader.bin");
     console.log("baixou bootloader");
     const partitions = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/partitions.bin");
@@ -224,7 +229,21 @@ console.log(endereco_firm_val);
       { data: partitions, address: 0x8000 },
       { data: main_firmware, address: 0x10000 },
     ];
-  } else if (placa_val == "ESP8266") {
+  } 
+  
+  else if (placa_val === "ESPCAM") {
+    const bootloader = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/espcam/bootloader_esp32_qio_80m.bin");
+    console.log("baixou bootloader espcam");
+    const partitions = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/espcam/partitions_espcam.bin");
+    console.log("baixou partitions espcam");
+
+    fileArray = [
+      { data: bootloader, address: 0x1000 },
+      { data: partitions, address: 0x8000 },
+      { data: main_firmware, address: 0x10000 },
+    ];
+  }
+  else if (placa_val == "ESP8266") {
     fileArray = [{ data: main_firmware, address: 0x0 }];
   }
 
@@ -258,7 +277,6 @@ console.log(endereco_firm_val);
     if (transport) await transport.disconnect();
     connected = false;
     updateProgressBar(0);
-    transport2;
     transport2 = new Transport(device);
     await transport2.connect(115200);
     await transport2.setDTR(false);
