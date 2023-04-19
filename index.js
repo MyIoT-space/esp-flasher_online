@@ -35,7 +35,7 @@ disconnectButton.style.display = 'none';
 eraseButton.style.display = 'none';
 mensagem.style.marginBottom = "20px";
 programButton.style.display = 'none';
-// terminal.style.display = 'none';
+terminal.style.display = 'none';
 mensagem.style.fontSize = '22px';
 progress.style.display = 'none';
 nome_placa.style.display = 'flex';
@@ -91,10 +91,10 @@ connectButton.onclick = async () => {
   }
   let speed = 115200;
 
-  // if (placa_val == "ESP8266") {
-  //   console.log("mudando para 115200, visto que é uma ESP8266");
-  //   speed = 115200;
-  // }
+  if (placa_val == "ESPCAM HUGEAPP") {
+    console.log("mudando para 460800, visto que é uma ESPCAM com codigo enorme");
+    speed = 115200;
+  }
     mensagem.style.color = "white";
   try {
     esploader = new ESPLoader(transport, speed, espLoaderTerminal);
@@ -218,7 +218,20 @@ programButton.onclick = async () => {
   const main_firmware = await fetchAndReadBinaryString(endereco_firm_val);
 
   let fileArray = null;
-  if (placa_val === "ESP32 DEVKIT") {
+    if (placa_val === "ESP32 DEVKIT NODEMCU") {
+    const bootloader = await fetchAndReadBinaryString("https://9a90d2b8-e895-4838-bb10-7453bc182665.usrfiles.com/ugd/9a90d2_7eca0185d8bb40fb9824e3daf9ad04cc.txt");
+    console.log("baixou bootloader nodemcu");
+    const partitions = await fetchAndReadBinaryString("https://9a90d2b8-e895-4838-bb10-7453bc182665.usrfiles.com/ugd/9a90d2_795c5c8d927d4352b0e61a49904deac1.txt");
+    console.log("baixou partitions nodemcu");
+
+    fileArray = [
+      { data: bootloader, address: 0x1000 },
+      { data: partitions, address: 0x8000 },
+      { data: main_firmware, address: 0x10000 },
+    ];
+  } 
+
+else if (placa_val === "ESP32 DEVKIT") {
     const bootloader = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/bootloader.bin");
     console.log("baixou bootloader");
     const partitions = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/partitions.bin");
@@ -236,6 +249,18 @@ programButton.onclick = async () => {
     console.log("baixou bootloader espcam");
     const partitions = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/espcam/partitions_espcam.bin");
     console.log("baixou partitions espcam");
+
+    fileArray = [
+      { data: bootloader, address: 0x1000 },
+      { data: partitions, address: 0x8000 },
+      { data: main_firmware, address: 0x10000 },
+    ];
+  }
+  else if (placa_val === "ESPCAM HUGEAPP") {
+    const bootloader = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/espcam/bootloader_esp32_qio_80m.bin");
+    console.log("baixou bootloader espcam");
+    const partitions = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/espcam/partitions_espcam_hugeapp.bin");
+    console.log("baixou partitions espcam hugeapp");
 
     fileArray = [
       { data: bootloader, address: 0x1000 },

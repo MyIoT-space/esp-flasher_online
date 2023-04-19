@@ -8,9 +8,12 @@ EXCLUDED_PATHS = [
     '/index.js', '/bundle.js', '/firmware.bin', '/lib/aparencia.css',
     '/placas/esp32devkit/bootloader.bin', '/placas/esp32devkit/partitions.bin',
     '/placas/espcam/partitions_espcam.bin',
+    '/placas/espcam/partitions_espcam_hugeapp.bin',
     '/placas/espcam/bootloader_esp32_qio_80m.bin', '/OTA/esp32/',
     '/OTA/esp32/firmware_version', '/OTA/esp32/firmware.bin',
-    '/OTA/OCTOPUS/firmware.bin', '/OTA/OCTOPUS/firmware_version'
+    '/OTA/OCTOPUS/firmware.bin', '/OTA/OCTOPUS/firmware_version',
+    '/OTA/TERMOMETRO_DHT22/firmware.bin',
+    '/OTA/TERMOMETRO_DHT22/firmware_version'
 ]
 
 
@@ -89,6 +92,19 @@ def firmware_OTA_OCTOPUS():
     return send_file('OTA/OCTOPUS/firmware.bin')
 
 
+@app.route('/OTA/TERMOMETRO_DHT22/firmware_version', methods=['GET', 'POST'])
+def firmware_version_OTA_TERMOMETRO_DHT22():
+    with open('OTA/TERMOMETRO_DHT22/firmware_version_term_dht.txt', 'r') as f:
+        version = f.readline().strip()
+        print(version)
+    return jsonify({'version': version})
+
+
+@app.route('/OTA/TERMOMETRO_DHT22/firmware.bin', methods=['GET', 'POST'])
+def firmware_OTA_TERMOMETRO_DHT22():
+    return send_file('OTA/TERMOMETRO_DHT22/firmware.bin')
+
+
 @app.route('/OTA/esp32/', methods=['GET', 'POST'])
 def hello():
     return 'Hello, World!', 200
@@ -124,6 +140,11 @@ def bootloader_esp32devkit():
 @app.route('/placas/espcam/partitions_espcam.bin')
 def partitions_espcam():
     return send_file('placas/espcam/partitions_espcam.bin')
+
+
+@app.route('/placas/espcam/partitions_espcam_hugeapp.bin')
+def partitions_espcam_hugeapp():
+    return send_file('placas/espcam/partitions_espcam_hugeapp.bin')
 
 
 @app.route('/placas/espcam/bootloader_esp32_qio_80m.bin')
