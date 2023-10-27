@@ -215,7 +215,16 @@ programButton.onclick = async () => {
   // await esploader.erase_region(0xe000, 0xFFFF);
   // await esploader.erase_region(0x10000, 0x46FFF);
   console.log(endereco_firm_val);
-  const main_firmware = await fetchAndReadBinaryString(endereco_firm_val);
+    console.log(placa_val)
+    let main_firmware = '';
+    if(placa_val != "ESP32 KATCODE"){
+   main_firmware = await fetchAndReadBinaryString(endereco_firm_val);
+        console.log("ta aqui");
+    }
+    else{
+        console.log("entrou aqui por algum motivo");
+    }
+    
 
   let fileArray = null;
     if (placa_val === "ESP32 DEVKIT NODEMCU") {
@@ -231,6 +240,36 @@ programButton.onclick = async () => {
     ];
   } 
 
+else if (placa_val === "ESP32 KATCODE") {
+    const bootloader = await fetchAndReadBinaryString("https://katcode.vercel.app/esp32/KatProgrammer.ino.bootloader.bin");
+    console.log("baixou bootloader");
+    const partitions = await fetchAndReadBinaryString("https://katcode.vercel.app/esp32/KatProgrammer.ino.partitions.bin");
+    console.log("baixou partitions");
+    const app = await fetchAndReadBinaryString("https://katcode.vercel.app/esp32/boot_app0.bin");
+    console.log("app kat");
+    const programadorKat = await fetchAndReadBinaryString("https://katcode.vercel.app/esp32/KatProgrammer.ino.bin");
+    console.log("baixou programador kat");
+
+    fileArray = [
+      { data: bootloader, address: 0x1000 },
+      { data: partitions, address: 0x8000 },
+        { data: app, address: 0xe000 },
+      { data: programadorKat, address: 0x10000 },
+    ];
+  } 
+
+    else if (placa_val === "ESP32 LORA") {
+    const bootloader = await fetchAndReadBinaryString("https://9a90d2b8-e895-4838-bb10-7453bc182665.usrfiles.com/ugd/9a90d2_fd6782620a734ecb813fc5bae53bf67a.txt");
+    console.log("baixou bootloader");
+    const partitions = await fetchAndReadBinaryString("https://9a90d2b8-e895-4838-bb10-7453bc182665.usrfiles.com/ugd/9a90d2_9cd572646cb5447d80381bf139cd7d08.txt");
+    console.log("baixou partitions");
+
+    fileArray = [
+      { data: bootloader, address: 0x1000 },
+      { data: partitions, address: 0x8000 },
+      { data: main_firmware, address: 0x10000 },
+    ];
+  } 
 else if (placa_val === "ESP32 DEVKIT") {
     const bootloader = await fetchAndReadBinaryString("https://espflasher.leonuzzy.repl.co/placas/esp32devkit/bootloader.bin");
     console.log("baixou bootloader");

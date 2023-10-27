@@ -13,7 +13,9 @@ EXCLUDED_PATHS = [
     '/OTA/esp32/firmware_version', '/OTA/esp32/firmware.bin',
     '/OTA/OCTOPUS/firmware.bin', '/OTA/OCTOPUS/firmware_version',
     '/OTA/TERMOMETRO_DHT22/firmware.bin',
-    '/OTA/TERMOMETRO_DHT22/firmware_version'
+    '/OTA/TERMOMETRO_DHT22/firmware_version',
+    '/OTA/TERMOMETRO_DHT22_ZAP/firmware.bin',
+    '/OTA/TERMOMETRO_DHT22_ZAP/firmware_version'
 ]
 
 
@@ -104,6 +106,17 @@ def firmware_version_OTA_TERMOMETRO_DHT22():
 def firmware_OTA_TERMOMETRO_DHT22():
     return send_file('OTA/TERMOMETRO_DHT22/firmware.bin')
 
+@app.route('/OTA/TERMOMETRO_DHT22_ZAP/firmware_version', methods=['GET', 'POST'])
+def firmware_version_OTA_TERMOMETRO_DHT22_ZAP():
+    with open('OTA/TERMOMETRO_DHT22_ZAP/firmware_version_term_dht_zap.txt', 'r') as f:
+        version = f.readline().strip()
+        print(version)
+    return jsonify({'version': version})
+
+
+@app.route('/OTA/TERMOMETRO_DHT22_ZAP/firmware.bin', methods=['GET', 'POST'])
+def firmware_OTA_TERMOMETRO_DHT22_ZAP():
+    return send_file('OTA/TERMOMETRO_DHT22_ZAP/firmware.bin')
 
 @app.route('/OTA/esp32/', methods=['GET', 'POST'])
 def hello():
@@ -199,4 +212,4 @@ def favicon():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', debug=False)
